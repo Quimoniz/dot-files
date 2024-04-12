@@ -17,8 +17,13 @@ sudo apt install mariadb-client
 sudo apt install python3-pip
 pip3 install mysqlclient==2.2.0
 
+# Beloved Commandline Tools
+sudo apt install git
+sudo apt install curl
 sudo apt install ncal
 sudo apt install jq
+sudo apt install most
+sudo apt install pwgen
 
 sudo apt install vlc
 sudo apt install gimp
