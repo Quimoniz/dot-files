@@ -22,6 +22,9 @@ set shiftwidth=4
 """"""""""""""""""
 syntax on
 set number
+" Show too long line (Legacy console size is 80x24,
+"   however quite some work places consider some 100 chars to be ok too)
+set colorcolumn=90
 
 
 " Show color schemes from Vim session
