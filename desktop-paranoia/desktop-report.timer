@@ -1,0 +1,10 @@
+[Unit]
+Description=Timer for Desktop Report Service
+
+[Timer]
+OnBootSec=5min
+OnUnitActiveSec=5min
+Unit=desktop-report.service
+
+[Install]
+WantedBy=timers.target

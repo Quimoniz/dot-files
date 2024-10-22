@@ -1,0 +1,12 @@
+[Unit]
+Description=Desktop Report Service
+After=graphical.target
+
+[Service]
+Type=simple
+ExecStart=/usr/local/bin/desktop-report.sh
+User=1000
+
+[Install]
+WantedBy=default.target
+
