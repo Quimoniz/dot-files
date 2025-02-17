@@ -1,9 +1,15 @@
 [Unit]
 Description=Timer for Desktop Report Service
 
+# systemd timers For The Win!
+# https://wiki.archlinux.org/title/Systemd/Timers
 [Timer]
-OnBootSec=5min
+OnBootSec=50 seconds
 OnUnitActiveSec=5min
+# When activated, it triggers the service immediately if it missed the last start
+# time (option Persistent=true), for example due to the system being powered off: 
+Persistent=true
+#OnCalendar=*-*-* 00:00,05,10,15,20,25,30,35,40,45,50,55
 Unit=desktop-report.service
 
 [Install]

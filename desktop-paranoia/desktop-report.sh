@@ -3,7 +3,7 @@
 #thanks to https://askubuntu.com/questions/66914/how-to-change-desktop-background-from-command-line-in-unity
 #get current background
 #cur_pic="$(gsettings get org.gnome.desktop.background picture-uri | sed "s,^'file://,,;s/'\$//;")";
-cur_pic="$(echo $HOME/Pictures/katze*.jpg | tr " " "\\n" | shuf | head -n 1)";
+cur_pic="$(echo $HOME/Pictures/spaceship-kitten-*.jpg | tr " " "\\n" | shuf | head -n 1)";
 
 cur_resolution="$(identify "${cur_pic}" | grep -oE "[[:digit:]]+x[[:digit:]]+" | head -n 1)";
 cur_pic_width=$(sed -E "s/^([[:digit:]]*)x.*/\\1/" <<< "${cur_resolution}");
@@ -134,8 +134,17 @@ done <<< "${connected_usb}";
 bash -c "convert \"${cur_pic}\" ${conv_lines} -quality 90 \"${background_path}\""
 # just set background image, based on uptime (since systemd doesn't have a nice
 #   variable available to tell us that we're running for the very first time
-old_background_path="$(gsettings get org.gnome.desktop.background picture-uri)";
-if grep -q "{background_path}" <<< "${old_background_path}"; then
-    echo "Calling gsettings, to set the path to the background (file://${background_path}), as it's not yet set.";
-    gsettings set org.gnome.desktop.background picture-uri "file://${background_path}";
+DBUS_PATH="org.gnome.desktop.background";
+DBUS_OBJ_NAME="picture-uri";
+old_background_path="$(gsettings get $DBUS_PATH $DBUS_OBJ_NAME )";
+
+MATCHED_PATH="$(grep -q "{background_path}" <<< "${old_background_path}")";
+# Also use randomness to be setting/forcing the background occassionally,
+#   avoids permannent stalling of old background.
+#  Random is between 0 and 32256, so 10700 is about every third time
+if test -z "${MATCHED_PATH}" || test $RANDOM -lt 10700; then
+    echo "Calling gsettings, to set the path to the background (file://${background_path}).";
+    gsettings set $DBUS_PATH $DBUS_OBJ_NAME "file://${background_path}";
+else
+    echo "No need to invoke 'gsettings set' as the Desktop background has already been set";
 fi;

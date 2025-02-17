@@ -1,12 +1,21 @@
 [Unit]
 Description=Desktop Report Service
 After=graphical.target
+Wants=desktop-report.timer
 
 [Service]
-Type=simple
+Type=oneshot
+# delayed startup; as apparently a lot of services, which are supposed to be run
+#   by a timer like this one, can suffer from late mounting...
+ExecStartPre=/usr/bin/bash -c "sleep $((10 + $RANDOM / 512))"
 ExecStart=/usr/local/bin/desktop-report.sh
 User=1000
 
 [Install]
-WantedBy=default.target
+# From: https://www.freedesktop.org/software/systemd/man/latest/systemd.special
+# default.target
+#    The default unit systemd starts at bootup. Usually, this should be aliased (symlinked) to multi-user.target or graphical.target. See bootup(7) for more discussion.
+#    The default unit systemd starts at bootup can be overridden with the systemd.unit= kernel command line option, or more conveniently, with the short names like single, rescue, 1, 3, 5, …; see systemd(1).
+#    For typical unit files please set "WantedBy=" to a regular target (like multi-user.target or graphical.target), instead of default.target, since such a service will also be run on special boots like on system update, emergency boot…
+WantedBy=graphical.target
 
