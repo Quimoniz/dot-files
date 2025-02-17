@@ -54,3 +54,11 @@ nmap <silent> <c-l> :wincmd l<CR>
 """""""""""""""""""""""""""""""""""""""""""""""""
 " Switching tabs with 'gt' and 'gT' respectively
 """""""""""""""""""""""""""""""""""""""""""""""""
+
+
+"""""""""""""""""""""""""""""""""""""""""""""""""
+" Syntax folding
+" also see: https://stackoverflow.com/a/16743264
+"""""""""""""""""""""""""""""""""""""""""""""""""
+set foldmethod=indent
+set foldlevel=1

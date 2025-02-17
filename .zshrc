@@ -60,7 +60,7 @@ ZSH_THEME="robbyrussell"
 # "mm/dd/yyyy"|"dd.mm.yyyy"|"yyyy-mm-dd"
 # or set a custom format using the strftime function format specifications,
 # see 'man strftime' for details.
-# HIST_STAMPS="mm/dd/yyyy"
+HIST_STAMPS="yyyy-mm-dd"
 
 # Would you like to use another custom folder than $ZSH/custom?
 # ZSH_CUSTOM=/path/to/new-custom-folder
@@ -155,48 +155,20 @@ HISTFILE=~/.zsh_history
 ## make less more friendly for non-text input files, see lesspipe(1)
 #[ -x /usr/bin/lesspipe ] && eval "$(SHELL=/bin/sh lesspipe)"
 #
-## set variable identifying the chroot you work in (used in the prompt below)
-#if [ -z "${debian_chroot:-}" ] && [ -r /etc/debian_chroot ]; then
-#    debian_chroot=$(cat /etc/debian_chroot)
-#fi
-#
-## set a fancy prompt (non-color, unless we know we "want" color)
-#case "$TERM" in
-#    xterm-color|*-256color) color_prompt=yes;;
-#esac
-#
-## uncomment for a colored prompt, if the terminal has the capability; turned
-## off by default to not distract the user: the focus in a terminal window
-## should be on the output of commands, not on the prompt
-##force_color_prompt=yes
-#
-#if [ -n "$force_color_prompt" ]; then
-#    if [ -x /usr/bin/tput ] && tput setaf 1 >&/dev/null; then
-#	# We have color support; assume it's compliant with Ecma-48
-#	# (ISO/IEC-6429). (Lack of such support is extremely rare, and such
-#	# a case would tend to support setf rather than setaf.)
-#	color_prompt=yes
-#    else
-#	color_prompt=
-#    fi
-#fi
-#
-#if [ "$color_prompt" = yes ]; then
-#    PS1='${debian_chroot:+($debian_chroot)}\[\033[01;32m\]\u@\h\[\033[00m\]:\[\033[01;34m\]\w\[\033[00m\]\$ '
-#else
-#    PS1='${debian_chroot:+($debian_chroot)}\u@\h:\w\$ '
-#fi
-#unset color_prompt force_color_prompt
-#
-## If this is an xterm set the title to user@host:dir
-#case "$TERM" in
-#xterm*|rxvt*)
-#    PS1="\[\e]0;${debian_chroot:+($debian_chroot)}\u@\h: \w\a\]$PS1"
-#    ;;
-#*)
-#    ;;
-#esac
-#
+
+# From blastmaster
+#   and comments via https://unix.stackexchange.com/a/108840
+# this makes man pages look nicer...
+export LESS_TERMCAP_mb=$'\E[01;31m'    # Start Blink
+export LESS_TERMCAP_md=$'\E[01;37m'    # Start Bold
+export LESS_TERMCAP_me=$'\E[0m'        # Turn Off bold/blink/underline
+export LESS_TERMCAP_so=$'\E[01;44;33m' # Start StandOut
+export LESS_TERMCAP_se=$'\E[0m'        # Stop  StandOut
+export LESS_TERMCAP_us=$'\E[01;32m'    # Start Underline
+export LESS_TERMCAP_ue=$'\E[0m'        # Stop  Underline
+
+
+
 ## colored GCC warnings and errors
 ##export GCC_COLORS='error=01;31:warning=01;35:note=01;36:caret=01;32:locus=01:quote=01'
 #
@@ -215,7 +187,7 @@ fi
 ### ...
 ### -C  If set, disallow existing regular files to be overwritten
 ###           by redirection of output.
-##set -C
+set -C
 ### help set
 ### ...
 ###      -H  Enable ! style history substitution.  This flag is on
@@ -223,6 +195,9 @@ fi
 ### ...
 ### Using + rather than - causes these flags to be turned off.
 ##set +H          
+
+# Needed for e.g. 'terminaltexteffects'
+source $HOME/HOME_VENV/bin/activate
 
 ## git clone https://gitlab.com/phoneybadger/pokemon-colorscripts.git
 ##  cd pokemon-colorscripts
@@ -233,32 +208,82 @@ SUMMED_UP_DATE=$(($(date +%s) / 86400)) # arbitrary number which stays the same 
 RANDOM_POKE=$((${SUMMED_UP_DATE} % 150)) # The first edition has 150 pokemons here
 RANDOM_FIRST_EDITION_POKEMON="$(jq ".[${RANDOM_POKE}].name" ${POKE_DB_REPOSITORY}/pokemon.json)" # Query the name in the JSON with the tool 'jq'
 RANDOM_FIRST_EDITION_POKEMON="${RANDOM_FIRST_EDITION_POKEMON:1:-1}"  # Strip Double Quotes
-pokemon-colorscripts --no-title --name "${RANDOM_FIRST_EDITION_POKEMON}"
+export POKEMON_IMAGE="$(pokemon-colorscripts --no-title --name "${RANDOM_FIRST_EDITION_POKEMON}")";
 # https://de.wikipedia.org/wiki/Liste_der_Pok%C3%A9mon
-# var allBuf = new Array(); for(var curPoke of temp0.querySelectorAll("tr")) {var curNames = new Object(); var langs=[undefined, undefined, undefined, "german", undefined, "english", undefined, "french", undefined, "katakana", undefined, "katakana-transcription"]; for(curIndex of [3, 5, 7, 9, 11]) { var curEle = curPoke.childNodes[curIndex].childNodes[0]; if(curEle.tagName && curEle.tagName.length > 0) {curNames[langs[curIndex]] = curEle.title;} else {curNames[langs[curIndex]] = curEle.data;} } allBuf.push(curNames)} prompt("Pokemon-Namen, JSON:", JSON.stringify(allBuf));
+# var tableWithNames= document.querySelectorAll("table.wikitable")[0]; allBuf = new Array(); for(var curPoke of tableWithNames.querySelectorAll("tr")) {var curNames = new Object(); var langs=[undefined, undefined, undefined, "german", undefined, "english", undefined, "french", undefined, "katakana", undefined, "katakana-transcription"]; for(curIndex of [3, 5, 7, 9, 11]) { var curEle = curPoke.childNodes[curIndex].childNodes[0]; if(curEle.tagName && curEle.tagName.length > 0) {curNames[langs[curIndex]] = curEle.title;} else {curNames[langs[curIndex]] = curEle.data;} } allBuf.push(curNames)} prompt("Pokemon-Namen, JSON:", JSON.stringify(allBuf));
 POKEMON_GERMAN_NAME="$(jq '.['${RANDOM_POKE}'].german' $HOME/pokemon-list.json)"
 POKEMON_GERMAN_NAME="${POKEMON_GERMAN_NAME:1:-1}"
 POKEMON_TEXT="${POKEMON_GERMAN_NAME} (${RANDOM_FIRST_EDITION_POKEMON})"
-printf "%4s #%3d \e[37;40m\e[5m%s\e[0m%$((60 - ${#POKEMON_TEXT}))s\\n" "" "${RANDOM_POKE}" "${POKEMON_TEXT}" ""; 
+BLINKING="\e[5m"
+BLINKING=""
+export POKEMON_DESCRIPTION="$(printf "%4s #%3d \e[37;40m${BLINKING}%s\e[0m%$((60 - ${#POKEMON_TEXT}))s\\n" "" "$((${RANDOM_POKE} + 1))" "${POKEMON_TEXT}" "")";
 #
 # Look at 'infocmp' for ansi escape character informations
 
 # New in Unicode as of 2020:
 #    https://en.wikipedia.org/wiki/Box-drawing_character
-printf "\e[36m🮠▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔🮡\e[0m\\n"
-printf "\e[36m▏   \e[40;32mBe liberal in what you accept, be conservative in what you do.\e[0m            \e[36m▕\e[0m\\n"
-printf "\e[36m▏       \e[40;33;3mOnly do what you have been tasked to do.\e[0m                              \e[36m▕\e[0m\\n"
-printf "\e[36m▏       \e[40;36mTry to aim only for fulfilling the MUST goals.\e[0m                        \e[36m▕\e[0m\\n"
-printf "\e[36m▏         \e[40;36mFulfill the SHOULD goals only if they happen to fall in your way.\e[0m   \e[36m▕\e[0m\\n"
-printf "\e[36m▏           \e[44;30mWer schreibt, der bleibt.\e[0m                                         \e[36m▕\e[0m\\n"
-#printf "\e[36m▏\e[30;48;2;255;192;192mI'm perfectly happy to be schooled if someone more knowledgeable comes along!\e[36m▕\e[0m\\n"
+#printf \"\e[36m▏\e[30;48;2;255;192;192mI'm perfectly happy to be schooled if someone more knowledgeable comes along!\e[36m▕\e[0m\\n\"
 # NOPE: could not find that in the book... it's probably wrongly accounted to Dante
-# printf "        \e[44;30m\"He listens to good purpose who takes note.\" ― Dante Alighieri, Inferno\e[0m\\n"
+# printf \"        \e[44;30m\\"He listens to good purpose who takes note.\\" ― Dante Alighieri, Inferno\e[0m\\n\"
+# \e[36m▏        \e[44;30mWer schreibt, der bleibt.\e[0m                                         \e[36m▕\e[0m
+export BOX_TEXT="$(printf "
+\e[36m🮠▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔🮡\e[0m
+\e[36m▏ \e[40;32mRobustness principle: be conservative in what you do,\e[36m             ▕\e[0m
+\e[36m▏  \e[40;32m    be liberal in what you accept from others -- Jon Postel\e[36m      ▕\e[0m
+\e[36m▏ \e[40;33;3mOnly do what you have been tasked to do.\e[0m                          \e[36m▕\e[0m
+\e[36m▏ \e[40;36mTry to aim only for fulfilling the MUST goals.\e[0m                    \e[36m▕\e[0m
+\e[36m▏ \e[40;36mFulfill the SHOULD goals only if they happen to fall in your way.\e[0m \e[36m▕\e[0m
+\e[36m▏  \e[44;30m 广记不如淡墨 a powerful memory cannot compare with pale ink     \e[36m▕\e[0m
+\e[36m▏  \e[44;30m (政学录 (Political Science Records) by 尹会一 (Yin Huiyi)).\e[0m     \e[36m▕\e[0m
+\e[36m🮢🭻🭻🭻🭻🭻🭻🭻🭻🭻🭻🭻🭻🭻🭻🭻🭻🭻🭻🭻🭻🭻🭻🭻🭻🭻🭻🭻🭻🭻🭻🭻🭻🭻🭻🭻🭻🭻🭻🭻🭻🭻🭻🭻🭻🭻🭻🭻🭻🭻🭻🭻🭻🭻🭻🭻🭻🭻🭻🭻🭻🭻🭻🭻🭻🭻🭻🭻🮣\e[0m")
+"
+#\e[36m▏    \e[40;34mAdditionally, perhaps, you might want to also start the server with\e[0m   \e[36m▕\e[0m
+#\e[36m▏        \e[47;30;1m./run.sh\e[0m                                                          \e[36m▕\e[0m
+#\e[36m▏    \e[40;34mOr perhaps invoke some tests with something like     \e[0m                 \e[36m▕\e[0m
+#\e[36m▏        \e[47;30;1msource ../venv/bin/activate;\e[0m                                      \e[36m▕\e[0m
+#\e[36m▏        \e[47;30;1mpython3 manage.py test projects.tests.ProjectOverviewTesting\e[0m      \e[36m▕\e[0m
 
-alias portal='cd ~/code/dlr-hpc-portal/hpc_portal;'
+export TEXT_MOTIVATOR="
+  見ざる   (Mizaru)   See   no evil.
+  聞かざる (Kikazaru) Hear  no evil.
+  言わざる (Iwazaru)  Speak no evil.
+"
 
-printf "\e[36m🮢🭻🭻🭻🭻🭻🭻🭻🭻🭻🭻🭻🭻🭻🭻🭻🭻🭻🭻🭻🭻🭻🭻🭻🭻🭻🭻🭻🭻🭻🭻🭻🭻🭻🭻🭻🭻🭻🭻🭻🭻🭻🭻🭻🭻🭻🭻🭻🭻🭻🭻🭻🭻🭻🭻🭻🭻🭻🭻🭻🭻🭻🭻🭻🭻🭻🭻🭻🭻🭻🭻🭻🭻🭻🭻🭻🭻🭻🮣\e[0m\\n"
+echo "${POKEMON_IMAGE}";
+# https://github.com/ChrisBuilds/terminaltexteffects/tree/main
+{ python3 -c $'
+from os import getenv
+#from terminaltexteffects.effects.effect_binarypath import BinaryPath
+from terminaltexteffects.effects.effect_print import Print
 
+# Adapted from: https://stackoverflow.com/a/14693789
+import re
+def remove_color_codes(text):
+    # 7-bit C1 ANSI sequences
+    ansi_escape = re.compile(r\'\x1B(?:[@-Z\\-_]|\\[[0-?]*[ -/]*[@-~])\')
+    return ansi_escape.sub(\'\', text)
+
+text_to_animate = getenv("POKEMON_DESCRIPTION") + \\
+                  getenv("BOX_TEXT") + \\
+                  getenv("TEXT_MOTIVATOR")
+
+all_effects = [
+  Print(remove_color_codes(text_to_animate)),
+ ]
+# Binary Path
+#all_effects[0].effect_config.final_gradient_steps = 4
+#all_effects[0].effect_config.movement_speed = 4.0
+#all_effects[0].effect_config.active_binary_groups = 0.4
+all_effects[0].effect_config.print_speed = 4 
+all_effects[0].effect_config.print_head_return_speed = 8.0
+
+for effect in all_effects:
+    with effect.terminal_output() as terminal:
+        for frame in effect:
+            terminal.print(frame)
+' }
+
+#
 #
 export EDITOR=/usr/bin/vim
 export HOSTNAME="$(hostname)"
@@ -272,27 +297,60 @@ export HOSTNAME="$(hostname)"
 ## USER, PWD, HOME, LANG, PS1, TERM, DISPLAY, OSTYPE
 
 export LESSEDIT=/usr/bin/vim
+# Used by e.g. MariaDB, git
+export PAGER=/usr/bin/less
+export PATH="${HOME}/.local/bin:${PATH}"
 
 dance_iter() {
-    printf "\e[13D🯅            "
-    sleep 0.2
-    printf "\e[13D🯆            "
-    sleep 0.2
-    printf "\e[13D🯇            "
-    sleep 0.2
-    printf "\e[13D🯈            "
-    sleep 0.2
-    printf "\e[13D🯆            "
+    local chars="🯆🯇🯈🯆🯅";
+    chars=""
+    for i in $(seq 0 4); do
+        printf "\e[13D${chars:$i:1}            ";
+        [ $i -lt 4 ] && sleep 0.2;
+    done
 }
+lennyfaces_iter() {
+    local lennyfaces="♨(⋆‿⋆)♨
+╘[◉﹃◉]╕
+╕[◉﹃◉]╘
+(ﾉ◕ヮ◕)ﾉ*:･ﾟ✧"
+    while read cur_lenny; do
+        lennytext="$(printf "${cur_lenny}" | tr -d "\\n")";
+        lennylen=${#lennytext};
+        filllen=$((25 - $lennylen))
+        printf "\e[1K\e[50D%20s${lennytext} %${filllen}s" '' '';
+        sleep 0.2;
+    done <<< "${lennyfaces}";
+}
+
 printf "                                         \e[25l"
-for i in $(seq 1 3); do
-    dance_iter
-done
-printf "\e[25h\e[13D"
-printf "  Let's do good things\\n"
+#for i in $(seq 1 2); do
+#    lennyfaces_iter
+#done
+printf "\e[25h\e[13D\\n"
+#printf "  Let's do good things\\n"
 
  	 	 	
 
 
 # If you're really desperate, just manually edit the file ~/.config/mimeapps.list.
 #     from https://askubuntu.com/questions/90214/how-do-i-set-the-default-program
+
+TODO_FILE_NAME="TODO_TODAY.txt"
+cat "$HOME/${TODO_FILE_NAME}" | sed "s/^/${TODO_FILE_NAME}:    /"
+TAGEBUCH_FILE="$HOME/Documents/tagebuch/$(date +%Y-%m-%d).md";
+if test -f "${TAGEBUCH_FILE}"; then
+    printf "Last entries to Tagebuch (today):\n";
+    tail "${TAGEBUCH_FILE}" | sed $'s/^/Tagebuch:    \e[3m/;s/\$/\e[0m/;';
+    #if test -f ".${TAGEBUCH_FILE}.swp"; then
+    #fi;
+fi;
+printf "You may edit Tagebuch like so:\n";
+#printf "  \e[33;40mvim %s\e[0m\n" "${TAGEBUCH_FILE}"
+printf "  \e[33;40mtagebuch\e[0m\n"
+
+# To be able to run latest greatest Node.js
+export NVM_DIR="$HOME/.nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
+[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
+nvm use 22

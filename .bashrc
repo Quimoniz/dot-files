@@ -116,3 +116,14 @@ printf "\e[40;32mBe liberal in what you accept, be conservative in what you do.\
 printf "\e[40;33;3m    Only do what you have been tasked to do.\e[0m\\n"
 printf "\e[40;36m    Try to aim only for fulfilling the MUST goals. Fulfill the SHOULD goals only if they happen to fall in your way.\e[0m\\n"
 printf "        \e[44;30mWer schreibt, der bleibt.\e[0m\\n"
+printf "\e[30;48;3;255;192;192mI'm perfectly happy to be schooled if someone more knowledgeable comes along!\e[0m\\n"
+# NOPE: could not find that in the book... it's probably wrongly accounted to Dante
+# printf "        \e[44;30m\"He listens to good purpose who takes note.\" ― Dante Alighieri, Inferno\e[0m\\n"
+
+
+printf "cd /home/jitschin/git/dlr-hpc-portal/hpc_portal; source ../venv/bin/activate; python3 manage.py test --exclude-tag=external --exclude-tag=external_fail_fast projects.tests.ProjectOverviewTesting\\n"
+
+
+export EDITOR=/usr/bin/vim
+
+
