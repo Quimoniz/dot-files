@@ -95,7 +95,11 @@ if ! shopt -oq posix; then
   fi
 fi
 
+# Color combination based on: https://en.wikipedia.org/wiki/ANSI_escape_code#8-bit
+# greenish to green-blue:
 export PS1="\[\e[48:5:191;30;1m\][\t]\[\e[0m\]\[\e[48:5:192;30;1m\]\h:\[\e[0m\]\[\e[48:5:194;30;1m\]\w\[\e[0m\]\[\e[48:5:195;30;1m\]$ \[\e[0m\]";
+# purple to blue:
+# export PS1="\[\e[48:5:183;30;1m\][\t]\[\e[0m\]\[\e[48:5:111;30;1m\]\h:\[\e[0m\]\[\e[48:5:39;30;1m\]\w\[\e[0m\]\[\e[48:5:33;30;1m\]$ \[\e[0m\]";
 
 # help set
 # ...
