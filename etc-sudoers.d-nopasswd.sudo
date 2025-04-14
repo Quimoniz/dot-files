@@ -1,0 +1,6 @@
+# the modulus '%' checks for group membership
+# the first ALL is in the field for Host_List (i.e. all hosts are allowed)
+# the 'NOPASSWD' is a tag
+# and the last ALL is indicative of allowing all commands to be run
+
+%sudo ALL  = NOPASSWD: ALL
