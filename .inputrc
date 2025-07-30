@@ -1,0 +1,5 @@
+
+# FOR PURISTS
+# Change GNU readline behaviour, to not use the default key
+#  bindings (emacs style), but to use vi style key bindings
+#set editing-mode vi
